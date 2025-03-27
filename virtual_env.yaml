@@ -1,11 +1,13 @@
-name: csts
+name: csts-fp
 channels:
-  - pytorch
-  - anaconda
   - omgarcia
-  - conda-forge
   - defaults
+  - conda-forge
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
 dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=1_gnu
   - av=8.0.3=py38h2c5b837_0
   - backcall=0.2.0=pyh9f0ad1d_0
   - backports=1.0=py_2
@@ -14,12 +16,12 @@ dependencies:
   - brotlipy=0.7.0=py38h27cfd23_1003
   - bzip2=1.0.8=h7b6447c_0
   - c-ares=1.17.1=h27cfd23_0
-  - ca-certificates=2022.4.26=h06a4308_0
-  - certifi=2021.10.8=py38h06a4308_2
+  - ca-certificates=2024.11.26=h06a4308_0
+  - certifi=2024.8.30=py38h06a4308_0
   - cffi=1.14.6=py38h400218f_0
   - cloudpickle=2.0.0=pyhd3eb1b0_0
   - cryptography=3.4.7=py38hd23ed53_0
-  - cudatoolkit=11.0
+  - cudatoolkit=11.0.221=h6bb024c_0
   - cytoolz=0.11.0=py38h7b6447c_0
   - dask-core=2022.2.1=pyhd3eb1b0_0
   - decorator=4.4.2=pyhd3eb1b0_0
@@ -28,6 +30,7 @@ dependencies:
   - freetype=2.10.4=h5ab3b9f_0
   - fsspec=2022.2.0=pyhd3eb1b0_0
   - gcc-6=6.1.0=2
+  - giflib=5.2.1=h7b6447c_0
   - git=2.23.0=pl526hacde149_0
   - gmp=6.2.1=h2531618_2
   - gnutls=3.6.15=he1e5248_0
@@ -44,6 +47,8 @@ dependencies:
   - lame=3.100=h7b6447c_0
   - lcms2=2.12=h3be6417_0
   - ld_impl_linux-64=2.35.1=h7274673_9
+  - libblas=3.9.0=11_linux64_mkl
+  - libcblas=3.9.0=11_linux64_mkl
   - libcurl=7.78.0=h0b77cf5_0
   - libedit=3.1.20210714=h7f8727e_0
   - libev=4.33=h7b6447c_0
@@ -53,6 +58,7 @@ dependencies:
   - libgfortran4=7.5.0=ha8ba4b0_17
   - libgomp=9.3.0=h5101ec6_17
   - libidn2=2.3.2=h7f8727e_0
+  - liblapack=3.9.0=11_linux64_mkl
   - libnghttp2=1.41.0=hf8bcb03_2
   - libpng=1.6.37=hbc83047_0
   - libssh2=1.9.0=h1ba5d50_1
@@ -61,6 +67,7 @@ dependencies:
   - libtiff=4.2.0=h85742a9_0
   - libunistring=0.9.10=h27cfd23_0
   - libuv=1.40.0=h7b6447c_0
+  - libwebp=1.2.0=h89dd481_0
   - libwebp-base=1.2.0=h27cfd23_0
   - locket=0.2.1=py38h06a4308_2
   - lz4-c=1.9.3=h295c915_1
@@ -74,11 +81,12 @@ dependencies:
   - ncurses=6.2=he6710b0_1
   - nettle=3.7.3=hbbd107a_1
   - ninja=1.10.2=h4bd325d_0
-  - numpy-base=1.20.3=py38h74d4b33_0
+  - numpy=1.21.2=py38h20f2e39_0
+  - numpy-base=1.21.2=py38h79a1101_0
   - olefile=0.46=pyhd3eb1b0_0
   - openh264=2.1.1=h780b84a_0
   - openjpeg=2.4.0=h3ad879b_0
-  - openssl=1.1.1o=h7f8727e_0
+  - openssl=1.1.1w=h7f8727e_0
   - packaging=21.3=pyhd3eb1b0_0
   - parso=0.8.3=pyhd8ed1ab_0
   - partd=1.2.0=pyhd3eb1b0_1
@@ -93,10 +101,12 @@ dependencies:
   - pycparser=2.20=py_2
   - pygments=2.11.2=pyhd8ed1ab_0
   - pyopenssl=20.0.1=pyhd3eb1b0_1
+  - pyparsing=3.1.2=py38h06a4308_0
   - pysocks=1.7.1=py38h06a4308_0
   - python=3.8.11=h12debd9_0_cpython
-  - pytorch==1.7.0
+  - python_abi=3.8=5_cp38
   - pywavelets=1.3.0=py38h7f8727e_0
+  - pyyaml=5.4.1=py38h497a2fe_0
   - readline=8.1=h27cfd23_0
   - requests=2.26.0=pyhd3eb1b0_0
   - scikit-image=0.19.2=py38h51133e4_0
@@ -106,92 +116,114 @@ dependencies:
   - tifffile=2020.10.1=py38hdd07704_2
   - tk=8.6.11=h1ccaba5_0
   - toolz=0.11.2=pyhd3eb1b0_0
-  - torchaudio==0.7.0
-  - torchvision==0.8.0
+  - tqdm=4.66.5=py38h2f386ee_0
   - traitlets=5.1.1=pyhd8ed1ab_0
-  - typing_extensions=3.10.0.2=pyh06a4308_0
-  - urllib3=1.26.6=pyhd3eb1b0_1
   - wcwidth=0.2.5=pyh9f0ad1d_2
+  - wheel=0.44.0=py38h06a4308_0
   - x264=1!161.3030=h7f98852_1
   - xz=5.2.5=h7b6447c_0
   - yaml=0.2.5=h7b6447c_0
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.9=haebb681_0
   - pip:
-    - absl-py==0.14.0
-    - antlr4-python3-runtime==4.8
-    - appdirs==1.4.4
-    - audioread==3.0.0
-    - black==21.4b2
-    - cachetools==4.2.2
-    - charset-normalizer==2.0.6
-    - click==8.0.1
-    - cycler==0.10.0
-    - cython==0.29.24
-    - einops==0.6.0
-    - fairscale==0.4.1
-    - filelock==3.8.0
-    - future==0.18.2
-    - fvcore
-    - google-auth==1.35.0
-    - google-auth-oauthlib==0.4.6
-    - grpcio==1.40.0
-    - huggingface-hub==0.9.1
-    - hydra-core==1.1.1
-    - importlib-metadata==4.12.0
-    - importlib-resources==5.2.2
-    - iopath==0.1.8
-    - joblib==1.1.0
-    - kiwisolver==1.3.2
-    - librosa==0.9.2
-    - llvmlite==0.39.0
-    - markdown==3.3.4
-    - matplotlib==3.4.3
-    - moviepy==1.0.3
-    - mypy-extensions==0.4.3
-    - networkx==2.6.3
-    - numba==0.56.0
-    - numpy==1.21.2
-    - oauthlib==3.1.1
-    - omegaconf==2.1.1
-    - opencv-python==4.5.3.56
-    - pandas==1.3.3
-    - parameterized==0.8.1
-    - pathspec==0.9.0
-    - pillow==8.3.2
-    - pooch==1.6.0
-    - portalocker==2.3.2
-    - protobuf==3.18.0
-    - psutil==5.8.0
-    - pyasn1==0.4.8
-    - pyasn1-modules==0.2.8
-    - pydot==1.4.2
-    - pyparsing==2.4.7
-    - python-dateutil==2.8.2
-    - pytorchvideo==0.1.5
-    - pytz==2021.1
-    - pyyaml==5.4.1
-    - regex==2021.9.24
-    - requests-oauthlib==1.3.0
-    - resampy==0.4.0
-    - rsa==4.7.2
-    - scikit-learn==1.0.2
-    - scipy==1.8.0
-    - simplejson==3.17.5
-    - sklearn==0.0
-    - soundfile==0.10.3.post1
-    - tabulate==0.8.9
-    - tensorboard==2.6.0
-    - tensorboard-data-server==0.6.1
-    - tensorboard-plugin-wit==1.8.0
-    - termcolor==1.1.0
-    - threadpoolctl==3.1.0
-    - timm==0.6.12
-    - tokenizers==0.12.1
-    - toml==0.10.2
-    - tqdm==4.62.3
-    - transformers==4.21.3
-    - werkzeug==2.0.1
-    - wheel==0.37.0
-    - yacs==0.1.8
-    - zipp==3.5.0
+      - absl-py==0.14.0
+      - annotated-types==0.7.0
+      - antlr4-python3-runtime==4.8
+      - appdirs==1.4.4
+      - audioread==3.0.0
+      - cachetools==4.2.2
+      - charset-normalizer==2.0.6
+      - click==8.0.1
+      - cycler==0.12.1
+      - dataclasses==0.6
+      - docker-pycreds==0.4.0
+      - einops==0.6.0
+      - eval-type-backport==0.2.2
+      - fairscale==0.4.1
+      - filelock==3.8.0
+      - future==0.18.2
+      - fvcore==0.1.5.post20221221
+      - gitdb==4.0.12
+      - gitpython==3.1.44
+      - google-auth==1.35.0
+      - google-auth-oauthlib==0.4.6
+      - grpcio==1.40.0
+      - huggingface-hub==0.9.1
+      - importlib-metadata==4.12.0
+      - importlib-resources==5.2.2
+      - iopath==0.1.8
+      - jinja2==3.1.4
+      - joblib==1.1.0
+      - kiwisolver==1.3.2
+      - librosa==0.9.2
+      - llvmlite==0.39.0
+      - markdown==3.7
+      - markupsafe==2.1.5
+      - matplotlib==3.4.3
+      - moviepy==1.0.3
+      - mpmath==1.3.0
+      - networkx==2.6.3
+      - numba==0.56.0
+      - nvidia-cublas-cu12==12.1.3.1
+      - nvidia-cuda-cupti-cu12==12.1.105
+      - nvidia-cuda-nvrtc-cu12==12.1.105
+      - nvidia-cuda-runtime-cu12==12.1.105
+      - nvidia-cudnn-cu12==9.1.0.70
+      - nvidia-cufft-cu12==11.0.2.54
+      - nvidia-curand-cu12==10.3.2.106
+      - nvidia-cusolver-cu12==11.4.5.107
+      - nvidia-cusparse-cu12==12.1.0.106
+      - nvidia-nccl-cu12==2.20.5
+      - nvidia-nvjitlink-cu12==12.6.85
+      - nvidia-nvtx-cu12==12.1.105
+      - oauthlib==3.2.2
+      - omegaconf==2.1.1
+      - opencv-python==4.5.3.56
+      - pandas==1.3.3
+      - parameterized==0.8.1
+      - pillow==10.4.0
+      - platformdirs==4.3.6
+      - pooch==1.6.0
+      - portalocker==3.0.0
+      - protobuf==3.18.0
+      - psutil==5.8.0
+      - pyasn1==0.4.8
+      - pyasn1-modules==0.2.8
+      - pydantic==2.10.6
+      - pydantic-core==2.27.2
+      - python-dateutil==2.8.2
+      - pytorchvideo==0.1.5
+      - pytz==2021.1
+      - regex==2021.9.24
+      - requests-oauthlib==2.0.0
+      - resampy==0.4.0
+      - rsa==4.9
+      - scikit-learn==1.0.2
+      - scipy==1.8.0
+      - sentry-sdk==2.20.0
+      - setproctitle==1.3.4
+      - simplejson==3.17.5
+      - sklearn==0.0
+      - smmap==5.0.2
+      - soundfile==0.10.3.post1
+      - sympy==1.13.3
+      - tabulate==0.9.0
+      - tensorboard==2.6.0
+      - tensorboard-data-server==0.6.1
+      - tensorboard-plugin-wit==1.8.1
+      - termcolor==2.4.0
+      - threadpoolctl==3.1.0
+      - timm==0.6.12
+      - tokenizers==0.12.1
+      - torch==2.4.1
+      - torchaudio==2.4.1
+      - torchvideo==0.0.0
+      - torchvision==0.19.1
+      - transformers==4.21.3
+      - triton==3.0.0
+      - typing-extensions==4.12.2
+      - urllib3==1.26.20
+      - wandb==0.19.6
+      - werkzeug==2.0.1
+      - yacs==0.1.8
+      - zipp==3.5.0

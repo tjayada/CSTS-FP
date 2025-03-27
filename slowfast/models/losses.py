@@ -170,6 +170,44 @@ class EgoNCE(nn.Module):
         return - loss_i - loss_j
 
 
+
+class EgoNCE_Hard_Negative_Mining(nn.Module):
+    def __init__(self, temperature=0.05, hard_neg_weight=1.5, similarity_threshold=0.6):
+        super().__init__()
+        self.temperature = temperature
+        self.hard_neg_weight = hard_neg_weight
+        self.similarity_threshold = similarity_threshold
+
+    def forward(self, x):
+        mask = torch.eye(x.shape[0], device=x.device)
+
+        # Normalize similarities to [-1, 1] range if they aren't already
+        x = x / x.abs().max()
+
+        # Identify hard negatives with dynamic thresholding
+        pos_similarities = x[mask.bool()]
+        dynamic_threshold = pos_similarities.mean() - pos_similarities.std()
+        hard_negatives = ((x > dynamic_threshold) * (1 - mask)).bool()
+
+        # Apply temperature scaling
+        scaled_sim = x / self.temperature
+
+        # Weight hard negatives
+        weight_matrix = torch.ones_like(x)
+        weight_matrix[hard_negatives] = self.hard_neg_weight
+
+        i_sm = F.softmax(scaled_sim * weight_matrix, dim=1)
+        j_sm = F.softmax((scaled_sim * weight_matrix).t(), dim=1)
+
+        # Compute weighted NCE loss
+        mask_bool = mask.bool()
+        loss_i = -torch.log(torch.sum(i_sm * mask_bool, dim=1)).mean()
+        loss_j = -torch.log(torch.sum(j_sm * mask_bool, dim=1)).mean()
+
+        return loss_i + loss_j
+
+
+
 class KLDiv_plus_FLoss(nn.Module):
     def __init__(self, alpha=1):
         super(KLDiv_plus_FLoss, self).__init__()
@@ -193,6 +231,7 @@ _LOSSES = {
     "floss": FLoss,
     "egonce": EgoNCE,
     "kldiv+floss": KLDiv_plus_FLoss,
+    "egonce_hard_neg_mining": EgoNCE_Hard_Negative_Mining,
 }
 
 

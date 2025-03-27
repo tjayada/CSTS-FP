@@ -28,6 +28,7 @@ def build_model(cfg, gpu_id=None):
     else:
         assert (cfg.NUM_GPUS == 0), "Cuda is not available. Please set `NUM_GPUS: 0 for running on CPUs."
 
+    """
     # Construct the model
     name = cfg.MODEL.MODEL_NAME
     model = MODEL_REGISTRY.get(name)(cfg)
@@ -44,4 +45,27 @@ def build_model(cfg, gpu_id=None):
     if cfg.NUM_GPUS > 1:
         # Make model replica operate on the current device
         model = torch.nn.parallel.DistributedDataParallel(module=model, device_ids=[cur_device], output_device=cur_device)
+    return model
+    """
+    # Determine the device to use
+    if cfg.NUM_GPUS:
+        if gpu_id is None:
+            cur_device = torch.cuda.current_device()
+        else:
+            cur_device = gpu_id
+        device = torch.device(f'cuda:{cur_device}')
+    else:
+        device = torch.device('cpu')
+
+    # Construct the model with the device information
+    name = cfg.MODEL.MODEL_NAME
+    model = MODEL_REGISTRY.get(name)(cfg, device=device)
+
+    # Transfer the model to the current GPU device
+    model = model.to(device)
+
+    # Use multi-process data parallel model in the multi-gpu setting
+    if cfg.NUM_GPUS > 1:
+        model = torch.nn.parallel.DistributedDataParallel(module=model, device_ids=[cur_device], output_device=cur_device)
+
     return model

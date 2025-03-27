@@ -54,6 +54,12 @@ def parse_args():
         type=str,
     )
     parser.add_argument(
+        "--use_wandb",
+        help="Whether to use wandb",
+        default=False,
+        type=bool,
+    )
+    parser.add_argument(
         "opts",
         help="See slowfast/config/defaults.py for all options",
         default=None,

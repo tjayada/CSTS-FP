@@ -7,3 +7,4 @@ checkpoints/
 *.egg-info/
 out/
 !out/.gitkeep
+face_parsing.farl.lapa.main_ema_136500_jit191.pt

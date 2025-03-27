@@ -31,6 +31,7 @@ def train_epoch(
     cur_epoch,
     cfg,
     writer=None,
+    wandb_run=False
 ):
     """
     Perform the video training for one epoch.
@@ -75,7 +76,7 @@ def train_epoch(
 
             if cfg.MODEL.LOSS_FUNC == 'kldiv+egonce':
                 kldiv_fun = losses.get_loss_func('kldiv')
-                egonce_fun = losses.get_loss_func('egonce')
+                egonce_fun = losses.get_loss_func('egonce') if cfg.SOLVER.EGONCE_HARD_NEG_MINING else losses.get_loss_func('egonce_hard_neg_mining')
                 kldiv_fun = kldiv_fun()
                 egonce_fun = egonce_fun()
                 preds, v_embed, a_embed = preds
@@ -118,6 +119,16 @@ def train_epoch(
                 kldiv_loss, egonce_loss = kldiv_loss.item(), egonce_loss.item()
                 if (cur_iter + 1) % cfg.LOG_PERIOD == 0:
                     logger.info(f'Iter {cur_iter + 1}: kld_loss {round(kldiv_loss, 4)}, egonce_loss {round(egonce_loss, 4)}, loss {round(loss.item(), 4)}')
+                    
+                    
+                    if wandb_run:
+                        wandb_run.log({
+                            "epoch": cur_epoch,
+                            "Train/kldiv_loss": round(kldiv_loss, 4),
+                            "Train/egonce_loss": round(egonce_loss, 4),
+                            "Train/loss": round(loss.item(), 4),
+                            "is_training": 1
+                        })
 
         loss = loss.item()
 
@@ -147,7 +158,8 @@ def train_epoch(
                 writer.add_scalars({"Train/kldiv_loss": kldiv_loss, "Train/nce_loss": egonce_loss}, global_step=data_size * cur_epoch + cur_iter,)
 
         train_meter.iter_toc()  # measure all reduce for this meter
-        train_meter.log_iter_stats(cur_epoch, cur_iter)
+        wandb_step = data_size * cur_epoch + cur_iter
+        train_meter.log_iter_stats(cur_epoch, cur_iter, wandb_run)
         train_meter.iter_tic()
 
     # Log epoch stats.
@@ -156,7 +168,7 @@ def train_epoch(
 
 
 @torch.no_grad()
-def eval_epoch(val_loader, model, val_meter, cur_epoch, cfg, writer=None):
+def eval_epoch(val_loader, model, val_meter, cur_epoch, cfg, writer=None, wandb_run=False):
     """
     Evaluate the model on the val set.
     Args:
@@ -210,8 +222,9 @@ def eval_epoch(val_loader, model, val_meter, cur_epoch, cfg, writer=None):
                 "Val/Recall": recall,
                 "Val/Precision": precision,
             }, global_step=len(val_loader) * cur_epoch + cur_iter)
-
-        val_meter.log_iter_stats(cur_epoch, cur_iter)
+        
+        wandb_step = len(val_loader) * cur_epoch + cur_iter 
+        val_meter.log_iter_stats(cur_epoch, cur_iter, wandb_run=wandb_run)
         val_meter.iter_tic()
 
     # Log epoch stats.
@@ -243,7 +256,7 @@ def calculate_and_update_precise_bn(loader, model, num_iters=200, use_gpu=True):
     update_bn_stats(model, _gen_loader(), num_iters)
 
 
-def train(cfg):
+def train(cfg, wandb_run=False):
     """
     Train a video model for many epochs on train set and evaluate it on val set.
     Args:
@@ -313,6 +326,7 @@ def train(cfg):
             cur_epoch=cur_epoch,
             cfg=cfg,
             writer=writer,
+            wandb_run=wandb_run
         )
         epoch_timer.epoch_toc()
         logger.info(
@@ -353,7 +367,7 @@ def train(cfg):
             )
         # Evaluate the model on validation set.
         if is_eval_epoch:
-            eval_epoch(val_loader, model, val_meter, cur_epoch, cfg, writer)
+            eval_epoch(val_loader, model, val_meter, cur_epoch, cfg, writer, wandb_run)
 
     if writer is not None:
         writer.close()

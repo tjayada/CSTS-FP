@@ -280,7 +280,7 @@ class TrainGazeMeter(object):
         self.precision_total += precision * mb_size
         self.threshold = threshold
 
-    def log_iter_stats(self, cur_epoch, cur_iter):
+    def log_iter_stats(self, cur_epoch, cur_iter, wandb_run):
         """
         log the stats of the current iteration.
         Args:
@@ -308,6 +308,16 @@ class TrainGazeMeter(object):
             "threshold": self.threshold
         }
         logging.log_json_stats(stats)
+        
+        if wandb_run:
+            wandb_run.log({
+                    "epoch": cur_epoch,
+                    "Train/lr": self.lr,
+                    "Train/F1": self.f1.get_win_median(),
+                    "Train/Recall": self.recall.get_win_median(),
+                    "Train/Precision": self.precision.get_win_median(),
+                    "is_training": 1
+            })
 
     def log_epoch_stats(self, cur_epoch):
         """
@@ -427,7 +437,7 @@ class ValGazeMeter(object):
         self.all_preds.append(preds)
         self.all_labels.append(labels)
 
-    def log_iter_stats(self, cur_epoch, cur_iter):
+    def log_iter_stats(self, cur_epoch, cur_iter, wandb_run):
         """
         log the stats of the current iteration.
         Args:
@@ -451,6 +461,15 @@ class ValGazeMeter(object):
             "threshold": self.threshold
         }
         logging.log_json_stats(stats)
+        
+        if wandb_run:
+            wandb_run.log({
+                    "epoch": cur_epoch,
+                    "Val/F1": self.f1.get_win_median(),
+                    "Val/Recall": self.recall.get_win_median(),
+                    "Val/Precision": self.precision.get_win_median(),
+                    "is_training": 0
+            })
 
     def log_epoch_stats(self, cur_epoch):
         """

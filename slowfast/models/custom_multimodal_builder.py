@@ -15,6 +15,7 @@ from slowfast.models.utils import round_width, validate_checkpoint_wrapper_impor
 from . import stem_helper
 from .build import MODEL_REGISTRY
 
+from face_sdk.face_weight_pipeline import faceParsingPipeline, plot_output_images
 
 @MODEL_REGISTRY.register()
 class CSTS(nn.Module):
@@ -22,7 +23,7 @@ class CSTS(nn.Module):
     Multiscale Vision Transformers with Audio-Visual Fusion
     """
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, device=None):
         super(CSTS, self).__init__()
         # ============================= Get parameters =============================
         assert cfg.DATA.TRAIN_CROP_SIZE == cfg.DATA.TEST_CROP_SIZE
@@ -39,6 +40,8 @@ class CSTS(nn.Module):
         if use_2d_patch:
             self.patch_stride = [1] + self.patch_stride
             self.patch_stride_audio = [1] + self.patch_stride_audio
+
+        self.faceParsingModel = faceParsingPipeline(model_path='face_sdk/models', device=device, cfg=cfg)
 
         # =============================== Prepare output ===============================
         num_classes = cfg.MODEL.NUM_CLASSES
@@ -342,6 +345,10 @@ class CSTS(nn.Module):
 
     def forward(self, x, y, return_embed=False, return_spatial_attn=False, return_temporal_attn=False):
         inpt = x[0]  # size (B, 3, 8, 256, 256)
+        
+        if self.cfg.MODEL.FACE_PARSE:
+            inpt = self.faceParsingModel(inpt)
+
         x = self.patch_embed(inpt)  # size (B, 16384, 96)  16384 = 4*64*64
         y = self.patch_embed_audio(y)
 

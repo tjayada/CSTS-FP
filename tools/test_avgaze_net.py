@@ -93,7 +93,7 @@ def perform_test(test_loader, model, test_meter, cfg, writer=None):
     return test_meter
 
 
-def test(cfg):
+def test(cfg, wandb_run=False):
     """
     Perform testing on the video model.
     Args:

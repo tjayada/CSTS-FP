@@ -105,6 +105,7 @@ def construct_loader(cfg, split, is_precise_bn=False):
             drop_last=drop_last,
             collate_fn=collate_func,
             worker_init_fn=utils.loader_worker_init_fn(dataset),
+            persistent_workers=True,
         )
     return loader
 

@@ -564,6 +564,9 @@ _C.SOLVER.CLIP_GRAD_VAL = None
 
 # Clip gradient at this norm before optimizer update
 _C.SOLVER.CLIP_GRAD_L2NORM = None
+
+# Normalize input to EgoNCE loss function
+_C.SOLVER.EGONCE_HARD_NEG_MINING = False
 # ---------------------------------------------------------------------------- #
 # Misc options
 # ---------------------------------------------------------------------------- #
@@ -849,6 +852,9 @@ _C.TENSORBOARD.WRONG_PRED_VIS.TAG = "Incorrectly classified videos."
 # within this subset is visualized.
 _C.TENSORBOARD.WRONG_PRED_VIS.SUBSET_PATH = ""
 
+
+# Use Face Parsing Pipeline in model forward pass
+_C.MODEL.FACE_PARSE = False
 
 # ---------------------------------------------------------------------------- #
 # Demo options

@@ -117,5 +117,9 @@ def adaptive_f1(preds, labels_hm, labels, dataset):
             best_precision = precision[f1.argmax()]
             best_threshold = thresholds[i]
 
-    return float(best_f1.cpu().numpy()), float(best_recall.cpu().numpy()), \
-        float(best_precision.cpu().numpy()), best_threshold
+    try:
+        return float(best_f1.cpu().numpy()), float(best_recall.cpu().numpy()), \
+            float(best_precision.cpu().numpy()), best_threshold
+    except:
+        return float(best_f1), float(best_recall), \
+            float(best_precision), best_threshold
