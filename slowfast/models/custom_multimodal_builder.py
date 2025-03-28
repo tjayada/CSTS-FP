@@ -15,7 +15,7 @@ from slowfast.models.utils import round_width, validate_checkpoint_wrapper_impor
 from . import stem_helper
 from .build import MODEL_REGISTRY
 
-from face_sdk.face_weight_pipeline import faceParsingPipeline, plot_output_images
+from face_sdk.face_weight_pipeline import faceParsingPipeline
 
 @MODEL_REGISTRY.register()
 class CSTS(nn.Module):

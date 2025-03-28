@@ -18,9 +18,6 @@ def main():
     cfg = load_config(args)
     cfg = assert_and_infer_cfg(cfg)
     
-
-    print("use_wandb in main : ", use_wandb)
-
     if use_wandb:
         run = wandb.init(project="avgaze")
 
@@ -63,8 +60,6 @@ if __name__ == "__main__":
 
     use_wandb = args.use_wandb
     
-    print("use_wandb : ", use_wandb)
-
     if use_wandb:
         sweep_config = {
             "method": "grid",
