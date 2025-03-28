@@ -1,16 +1,22 @@
-# This work was done during my internship at the Institut de Robòtica i Informàtica Industrial (IRI) in Barcelona.
+## This work was carried out during my internship at the Institut de Robòtica i Informàtica Industrial (IRI) in Barcelona.
 
-### Project Description
-The main focus of the internship was to improve the work by Lai et al. and their paper [Listen to Look into the Future: Audio-Visual Egocentric Gaze Anticipation](https://arxiv.org/pdf/2305.03907). <br>
-Thus this repository is a direct Fork of their work. <br>
-The idea was to improve the metrics on the test dataset by introducing a face bias into the data and consequently model. So we integrated a Face-Parsing pipeline based on the [FaceX-Zoo repository](https://github.com/JDAI-CV/FaceX-Zoo) which was succesfully used in other research projects like the paper [MARLIN: Masked Autoencoder for Facial Video Representation LearnINg](https://openaccess.thecvf.com/content/CVPR2023/html/Cai_MARLIN_Masked_Autoencoder_for_Facial_Video_Representation_LearnINg_CVPR_2023_paper) by Cai et al. and their corresponding 
-[MARLIN repository](https://github.com/ControlNet/MARLIN). <br>
-After migrating the [Face-Parsing pipeline Model to GPUs]() and integrating it into the original models forward pass, the test metrics unfortunately did not improve. <br>
-This could may be because the idea and execution are flawed or because it was generally not possible for me to reproduce the original results presented by the authors. This again could be due to an issue with randomness mentioned by the authors in their GitHub repository. <br>
-For debugging purposes I have also integrated [weights-and-biases](https://wandb.ai/site) and thus the original training command can be also used with the `--use_wandb` flag. The parameters for a gridsearch can be adjusted in the `tools/run_net.py` file.
-In order to run this model, the [face_parsing model needs to be downloaded](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt) and put under `/face_sdk/models/face_parsing/face_parsing_1.0/`. <br>
-For the rest simply follow the instructions from the original repository down below :
+### Project Description 
+The main focus of the internship was to improve the work of Lai et al. and their paper [Listen to Look into the Future: Audio-Visual Egocentric Gaze Anticipation](https://arxiv.org/pdf/2305.03907) by making the model more face-centric through face segmentation, and thus improve the performance of gaze prediction in social settings, an area that the authors noted has been neglected so far.<br>
 
+Example segmentation of a frame in the dataset: <br>
+
+![face-parsing example](example_images/face-parsing.png)
+
+Example segmentation including hands (ultimately not implemented to focus on face parsing / social situations first): <br>
+
+![face+hand-parsing example](example_images/face+hand-parsing.png)
+
+As this work is largely based on [their work]([Listen to Look into the Future: Audio-Visual Egocentric Gaze Anticipation](https://arxiv.org/pdf/2305.03907)), this repository is a direct fork of their codebase. 
+So the idea was to improve the metrics on the test dataset by introducing a face bias into the data and consequently into the model. So we integrated a face parser pipeline based on the [FaceX-Zoo repository](https://github.com/JDAI-CV/FaceX-Zoo), which has been successfully used in other research projects such as the paper [MARLIN: Masked Autoencoder for Facial Video Representation LearnINg](https://openaccess.thecvf.com/content/CVPR2023/html/Cai_MARLIN_Masked_Autoencoder_for_Facial_Video_Representation_LearnINg_CVPR_2023_paper) by Cai et al. and their corresponding [MARLIN repository](https://github.com/ControlNet/MARLIN). 
+Unfortunately, after migrating the [Face-Parsing pipeline Model to GPUs]() and integrating it into the forward pass of the original models, the test metrics did not improve. <br>
+This could be because the idea and execution are flawed, or because I was generally unable to reproduce the original results presented by the authors. This may be due to a randomness problem mentioned by the authors in their GitHub repository. For debugging purposes I have also integrated [weights-and-biases](https://wandb.ai/site), so the original training command can also be used with the `--use_wandb` flag. The parameters for a grid search can be adjusted in `tools/run_net.py`.
+To run this model, you need to download the [face_parsing model](https://github.com/FacePerceiver/facer/releases/download/models-v1/face_parsing.farl.lapa.main_ema_136500_jit191.pt) and put it in `/face_sdk/models/face_parsing/face_parsing_1.0/`. 
+For the rest, just follow the instructions from the original repository below:
 
 # Listen to Look into the Future: Audio-Visual Egocentric Gaze Anticipation
 
